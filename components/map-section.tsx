@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
+import { useLanguage } from "@/contexts/language-context"
 
 // Sample review locations
 const reviewLocations = [
@@ -15,12 +16,13 @@ const reviewLocations = [
 
 export default function MapSection() {
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null)
+  const { t } = useLanguage()
 
   return (
     <section className="py-16 bg-gray-100">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-2 text-gray-900">Food Spots Map</h2>
-        <p className="text-gray-600 mb-8">Discover the best street food spots across Trinidad and Tobago</p>
+        <h2 className="text-3xl font-bold mb-2 text-gray-900">{t("map.title")}</h2>
+        <p className="text-gray-600 mb-8">{t("map.subtitle")}</p>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 bg-white rounded-lg p-4 border border-gray-200 shadow-sm relative">
@@ -72,7 +74,7 @@ export default function MapSection() {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-4 text-gray-900">Popular Locations</h3>
+            <h3 className="text-xl font-bold mb-4 text-gray-900">{t("map.popular")}</h3>
             <div className="space-y-4">
               {reviewLocations.map((loc) => (
                 <Card
@@ -88,7 +90,9 @@ export default function MapSection() {
                         <h4 className="font-bold text-gray-900">{loc.name}</h4>
                         <p className="text-gray-600 text-sm">{loc.location}</p>
                       </div>
-                      <div className="bg-red-100 text-red-600 px-2 py-1 rounded h-fit">{loc.count} reviews</div>
+                      <div className="bg-red-100 text-red-600 px-2 py-1 rounded h-fit">
+                        {loc.count} {t("map.reviews")}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

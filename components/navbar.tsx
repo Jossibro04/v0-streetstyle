@@ -1,22 +1,26 @@
 "use client"
 
 import Link from "next/link"
-import { User, Menu, Search } from "lucide-react"
+import { User, Menu, Search, Store } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
+import { useLanguage } from "@/contexts/language-context"
+import LanguageSelector from "@/components/language-selector"
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { t } = useLanguage()
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <div className="text-6xl font-extrabold text-red-700 tracking-tight">Streetstyle</div>
+          <Link href="/" className="flex items-center gap-2">
+            <Store className="h-8 w-8 text-red-700" />
+            <div className="text-5xl font-extrabold text-red-700 tracking-tight">Streetstyle</div>
           </Link>
 
           {/* Search Bar - visible on medium screens and up */}
@@ -24,7 +28,7 @@ export default function Navbar() {
             <div className="relative w-full">
               <Input
                 type="text"
-                placeholder="Search by cuisine"
+                placeholder={t("nav.search")}
                 className="pl-10 pr-4 py-2 w-full border-gray-300 focus:border-red-500 focus:ring-red-500"
               />
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -34,17 +38,20 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
             <Link href="/" className="text-gray-700 hover:text-red-500 transition">
-              Home
+              {t("nav.home")}
             </Link>
             <Link href="/reviews" className="text-gray-700 hover:text-red-500 transition">
-              Reviews
+              {t("nav.reviews")}
             </Link>
             <Link href="/map" className="text-gray-700 hover:text-red-500 transition">
-              Map
+              {t("nav.map")}
             </Link>
             <Link href="/about" className="text-gray-700 hover:text-red-500 transition">
-              About
+              {t("nav.about")}
             </Link>
+
+            {/* Language Selector */}
+            <LanguageSelector />
 
             {/* Profile Button */}
             <DropdownMenu>
@@ -57,12 +64,12 @@ export default function Navbar() {
               <DropdownMenuContent align="end" className="bg-white border-gray-200">
                 <DropdownMenuItem className="cursor-pointer hover:bg-gray-100">
                   <Link href="/login" className="w-full">
-                    Log In
+                    {t("nav.login")}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer hover:bg-gray-100">
                   <Link href="/signup" className="w-full">
-                    Sign Up
+                    {t("nav.signup")}
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -70,14 +77,17 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden transition-transform hover:scale-105"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            <Menu className="h-6 w-6 text-gray-700" />
-          </Button>
+          <div className="flex items-center gap-2 md:hidden">
+            <LanguageSelector />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden transition-transform hover:scale-105"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <Menu className="h-6 w-6 text-gray-700" />
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -87,7 +97,7 @@ export default function Navbar() {
             <div className="relative mb-4">
               <Input
                 type="text"
-                placeholder="Search by cuisine"
+                placeholder={t("nav.search")}
                 className="pl-10 pr-4 py-2 w-full border-gray-300 focus:border-red-500 focus:ring-red-500"
               />
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -99,28 +109,28 @@ export default function Navbar() {
                 className="text-gray-700 hover:text-red-500 transition px-3 py-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Home
+                {t("nav.home")}
               </Link>
               <Link
                 href="/reviews"
                 className="text-gray-700 hover:text-red-500 transition px-3 py-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Reviews
+                {t("nav.reviews")}
               </Link>
               <Link
                 href="/map"
                 className="text-gray-700 hover:text-red-500 transition px-3 py-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Map
+                {t("nav.map")}
               </Link>
               <Link
                 href="/about"
                 className="text-gray-700 hover:text-red-500 transition px-3 py-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                About
+                {t("nav.about")}
               </Link>
               <div className="flex space-x-2 px-3 py-2">
                 <Link
@@ -128,7 +138,7 @@ export default function Navbar() {
                   className="text-gray-700 hover:text-red-500 transition"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Log In
+                  {t("nav.login")}
                 </Link>
                 <span className="text-gray-500">|</span>
                 <Link
@@ -136,7 +146,7 @@ export default function Navbar() {
                   className="text-gray-700 hover:text-red-500 transition"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Sign Up
+                  {t("nav.signup")}
                 </Link>
               </div>
             </div>

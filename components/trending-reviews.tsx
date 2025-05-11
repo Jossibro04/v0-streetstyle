@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Star, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
+import { useLanguage } from "@/contexts/language-context"
 
 const trendingReviews = [
   {
@@ -76,12 +77,13 @@ export default function TrendingReviews() {
   const [filterOption, setFilterOption] = useState<FilterOption>("most-rated")
   const [currentIndex, setCurrentIndex] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
+  const { t } = useLanguage()
 
   const filterOptions = [
-    { value: "most-rated", label: "Most Rated" },
-    { value: "highest-rated", label: "Highest Rated" },
-    { value: "newest", label: "Newest" },
-    { value: "oldest", label: "Oldest" },
+    { value: "most-rated", label: t("trending.most_rated") },
+    { value: "highest-rated", label: t("trending.highest_rated") },
+    { value: "newest", label: t("trending.newest") },
+    { value: "oldest", label: t("trending.oldest") },
   ]
 
   const getFilterLabel = () => {
@@ -108,20 +110,32 @@ export default function TrendingReviews() {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + totalSlides) % totalSlides)
   }
 
+  // Function to translate date strings
+  const translateDate = (dateStr: string) => {
+    if (dateStr.includes("days")) {
+      return dateStr.replace("days ago", t("trending.days_ago"))
+    } else if (dateStr.includes("week")) {
+      return dateStr.replace("week ago", t("trending.weeks_ago")).replace("weeks ago", t("trending.weeks_ago"))
+    } else if (dateStr.includes("month")) {
+      return dateStr.replace("month ago", t("trending.months_ago")).replace("months ago", t("trending.months_ago"))
+    }
+    return dateStr
+  }
+
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
-            <h2 className="text-3xl font-bold mb-2 text-gray-900">Trending Reviews</h2>
-            <p className="text-gray-600">See what's hot in the street food scene right now</p>
+            <h2 className="text-3xl font-bold mb-2 text-gray-900">{t("trending.title")}</h2>
+            <p className="text-gray-600">{t("trending.subtitle")}</p>
           </div>
 
           <div className="mt-4 md:mt-0 flex items-center">
-            <span className="text-gray-700 mr-2">Sort by:</span>
+            <span className="text-gray-700 mr-2">{t("trending.sort")}</span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="border-gray-300">
+                <Button variant="outline" className="border-gray-300 transition-transform hover:scale-105">
                   {getFilterLabel()}
                   <ChevronDown className="ml-2 h-4 w-4" />
                 </Button>
@@ -178,7 +192,7 @@ export default function TrendingReviews() {
                           </CardContent>
                           <CardFooter className="px-4 py-3 border-t border-gray-200 text-sm text-gray-600">
                             <span>{review.author}</span>
-                            <span className="ml-auto">{review.date}</span>
+                            <span className="ml-auto">{translateDate(review.date)}</span>
                           </CardFooter>
                         </Card>
                       ))}
@@ -191,14 +205,14 @@ export default function TrendingReviews() {
           {/* Navigation buttons */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-100"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-100 transition-transform hover:scale-105"
             aria-label="Previous slide"
           >
             <ChevronLeft className="h-6 w-6 text-gray-700" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-100"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-100 transition-transform hover:scale-105"
             aria-label="Next slide"
           >
             <ChevronRight className="h-6 w-6 text-gray-700" />
@@ -220,8 +234,8 @@ export default function TrendingReviews() {
         </div>
 
         <div className="text-center mt-10">
-          <button className="text-red-600 border border-red-600 px-6 py-2 rounded-md hover:bg-red-600 hover:text-white transition-colors">
-            View All Reviews
+          <button className="text-red-600 border border-red-600 px-6 py-2 rounded-md hover:bg-red-600 hover:text-white transition-colors transition-transform hover:scale-105">
+            {t("trending.view_all")}
           </button>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Home, Search, Heart, User, Menu, X } from "lucide-react"
+import { Home, Search, Heart, User, Menu, X, Store } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
@@ -14,8 +14,9 @@ export default function MobileNavbar() {
       {/* Top Header */}
       <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50">
         <div className="flex items-center justify-between px-4 h-14">
-          <Link href="/" className="flex items-center">
-            <div className="text-3xl font-extrabold text-red-700 tracking-tight">Streetstyle</div>
+          <Link href="/" className="flex items-center gap-1">
+            <Store className="h-6 w-6 text-red-700" />
+            <div className="text-2xl font-extrabold text-red-700 tracking-tight">Streetstyle</div>
           </Link>
           <div className="flex items-center gap-2">
             <Sheet>
