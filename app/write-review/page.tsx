@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -8,48 +10,82 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Camera, MapPin, Star, Navigation } from "lucide-react"
+import { Camera, MapPin, Star, Navigation, CalendarIcon } from "lucide-react"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
-import { format } from "date-fns"
+import { format, parse, isValid } from "date-fns"
 
 export default function WriteReviewPage() {
-  const [overallRating, setOverallRating] = useState<number>(0)
-  const [tasteRating, setTasteRating] = useState<number>(0)
-  const [serviceRating, setServiceRating] = useState<number>(0)
-  const [valueRating, setValueRating] = useState<number>(0)
-  const [hoveredRating, setHoveredRating] = useState<{ category: string; value: number }>({ category: "", value: 0 })
+  const [ratings, setRatings] = useState({
+    overall: 0,
+    taste: 0,
+    service: 0,
+    value: 0,
+  })
+
+  const [hoverRatings, setHoverRatings] = useState({
+    overall: 0,
+    taste: 0,
+    service: 0,
+    value: 0,
+  })
+
   const [date, setDate] = useState<Date | undefined>(undefined)
+  const [dateInput, setDateInput] = useState<string>("")
   const [location, setLocation] = useState<string>("")
   const [isDetectingLocation, setIsDetectingLocation] = useState<boolean>(false)
   const [showPhotoUpload, setShowPhotoUpload] = useState<boolean>(false)
+  const [showCustomCuisine, setShowCustomCuisine] = useState<boolean>(false)
+  const [customCuisine, setCustomCuisine] = useState<string>("")
+  const [cuisineType, setCuisineType] = useState<string>("")
 
-  const handleRatingClick = (category: string, value: number) => {
-    switch (category) {
-      case "overall":
-        setOverallRating(value)
-        break
-      case "taste":
-        setTasteRating(value)
-        break
-      case "service":
-        setServiceRating(value)
-        break
-      case "value":
-        setValueRating(value)
-        break
+  const handleDateInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setDateInput(value)
+
+    // Try to parse the date
+    if (value.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+      try {
+        const parsedDate = parse(value, "dd/MM/yyyy", new Date())
+        if (isValid(parsedDate)) {
+          setDate(parsedDate)
+        }
+      } catch (error) {
+        // Invalid date format, just keep the text input
+      }
     }
   }
 
-  const handleRatingHover = (category: string, value: number) => {
-    setHoveredRating({ category, value })
+  const handleCuisineChange = (value: string) => {
+    setCuisineType(value)
+    setShowCustomCuisine(value === "other")
+    if (value !== "other") {
+      setCustomCuisine("")
+    }
   }
 
-  const handleRatingLeave = () => {
-    setHoveredRating({ category: "", value: 0 })
+  const handleRatingClick = (category: keyof typeof ratings, value: number) => {
+    setRatings((prev) => ({
+      ...prev,
+      [category]: value,
+    }))
+  }
+
+  const handleRatingHover = (category: keyof typeof hoverRatings, value: number) => {
+    setHoverRatings((prev) => ({
+      ...prev,
+      [category]: value,
+    }))
+  }
+
+  const handleRatingLeave = (category: keyof typeof hoverRatings) => {
+    setHoverRatings((prev) => ({
+      ...prev,
+      [category]: 0,
+    }))
   }
 
   const detectLocation = () => {
@@ -76,26 +112,27 @@ export default function WriteReviewPage() {
 
   const StarRating = ({
     category,
-    value,
-    onChange,
-  }: { category: string; value: number; onChange: (value: number) => void }) => {
+  }: {
+    category: keyof typeof ratings
+  }) => {
+    const rating = ratings[category]
+    const hoverRating = hoverRatings[category]
+
     return (
       <div className="flex items-center space-x-1">
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
             className={`h-6 w-6 cursor-pointer ${
-              star <= (hoveredRating.category === category ? hoveredRating.value : value)
-                ? "fill-yellow-400 text-yellow-400"
-                : "text-gray-300"
+              star <= (hoverRating || rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
             }`}
-            onClick={() => onChange(star)}
+            onClick={() => handleRatingClick(category, star)}
             onMouseEnter={() => handleRatingHover(category, star)}
-            onMouseLeave={handleRatingLeave}
+            onMouseLeave={() => handleRatingLeave(category)}
           />
         ))}
         <span className="ml-2 text-sm text-gray-600">
-          {value > 0 ? `${value} star${value > 1 ? "s" : ""}` : "Click to rate"}
+          {rating > 0 ? `${rating} star${rating > 1 ? "s" : ""}` : "Click to rate"}
         </span>
       </div>
     )
@@ -148,36 +185,67 @@ export default function WriteReviewPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="visit-date">Date of Visit*</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-full justify-start text-left font-normal">
-                      {date ? format(date, "PPP") : <span className="text-gray-500">Select a date</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
-                  </PopoverContent>
-                </Popover>
+                <div className="flex gap-2">
+                  <Input
+                    id="date-input"
+                    placeholder="DD/MM/YYYY"
+                    value={dateInput}
+                    onChange={handleDateInputChange}
+                    className="flex-1"
+                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="flex-shrink-0">
+                        <CalendarIcon className="h-4 w-4 mr-2" />
+                        <span>Calendar</span>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={(selectedDate) => {
+                          setDate(selectedDate)
+                          if (selectedDate) {
+                            setDateInput(format(selectedDate, "dd/MM/yyyy"))
+                          }
+                        }}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <p className="text-xs text-gray-500">Enter date in DD/MM/YYYY format or select from calendar</p>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="cuisine-type">Cuisine Type*</Label>
-                <Select>
+                <Select onValueChange={handleCuisineChange}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select cuisine type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="trinidadian">Trinidadian</SelectItem>
-                    <SelectItem value="tobagonian">Tobagonian</SelectItem>
                     <SelectItem value="indian">Indian</SelectItem>
                     <SelectItem value="chinese">Chinese</SelectItem>
                     <SelectItem value="creole">Creole</SelectItem>
+                    <SelectItem value="italian">Italian</SelectItem>
                     <SelectItem value="bbq">BBQ</SelectItem>
                     <SelectItem value="seafood">Seafood</SelectItem>
-                    <SelectItem value="street-food">Street Food</SelectItem>
                     <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
+
+                {showCustomCuisine && (
+                  <div className="mt-2">
+                    <Label htmlFor="custom-cuisine">Specify Cuisine</Label>
+                    <Input
+                      id="custom-cuisine"
+                      placeholder="Enter cuisine type"
+                      value={customCuisine}
+                      onChange={(e) => setCustomCuisine(e.target.value)}
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="space-y-4 border rounded-lg p-4 bg-gray-50">
@@ -185,38 +253,22 @@ export default function WriteReviewPage() {
 
                 <div className="space-y-2">
                   <Label>Overall Rating*</Label>
-                  <StarRating
-                    category="overall"
-                    value={overallRating}
-                    onChange={(value) => handleRatingClick("overall", value)}
-                  />
+                  <StarRating category="overall" />
                 </div>
 
                 <div className="space-y-2">
                   <Label>Taste</Label>
-                  <StarRating
-                    category="taste"
-                    value={tasteRating}
-                    onChange={(value) => handleRatingClick("taste", value)}
-                  />
+                  <StarRating category="taste" />
                 </div>
 
                 <div className="space-y-2">
                   <Label>Service</Label>
-                  <StarRating
-                    category="service"
-                    value={serviceRating}
-                    onChange={(value) => handleRatingClick("service", value)}
-                  />
+                  <StarRating category="service" />
                 </div>
 
                 <div className="space-y-2">
                   <Label>Value for Money</Label>
-                  <StarRating
-                    category="value"
-                    value={valueRating}
-                    onChange={(value) => handleRatingClick("value", value)}
-                  />
+                  <StarRating category="value" />
                 </div>
               </div>
 

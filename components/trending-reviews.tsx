@@ -80,6 +80,26 @@ export default function TrendingReviews() {
   const carouselRef = useRef<HTMLDivElement>(null)
   const { t } = useLanguage()
 
+  // Adjust number of visible reviews based on screen size
+  const [visibleReviews, setVisibleReviews] = useState(1)
+
+  // Update visible reviews count based on screen size
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setVisibleReviews(1) // Mobile: 1 review at a time
+      } else if (window.innerWidth < 1024) {
+        setVisibleReviews(2) // Tablet: 2 reviews at a time
+      } else {
+        setVisibleReviews(3) // Desktop: 3 reviews at a time
+      }
+    }
+
+    handleResize() // Initial check
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   const filterOptions = [
     { value: "most-rated", label: t("trending.most_rated") },
     { value: "highest-rated", label: t("trending.highest_rated") },
@@ -100,7 +120,6 @@ export default function TrendingReviews() {
     return () => clearInterval(interval)
   }, [currentIndex])
 
-  const visibleReviews = 3 // Number of reviews visible at once
   const totalSlides = Math.ceil(trendingReviews.length / visibleReviews)
 
   const nextSlide = () => {
@@ -164,11 +183,15 @@ export default function TrendingReviews() {
             >
               {Array.from({ length: totalSlides }).map((_, slideIndex) => (
                 <div key={slideIndex} className="min-w-full flex-shrink-0">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="flex flex-row gap-4 overflow-visible">
                     {trendingReviews
                       .slice(slideIndex * visibleReviews, (slideIndex + 1) * visibleReviews)
                       .map((review) => (
-                        <Link href={`/restaurant/${review.id}`} key={review.id} className="block">
+                        <Link
+                          href={`/restaurant/${review.id}`}
+                          key={review.id}
+                          className="block min-w-[85%] sm:min-w-[48%] md:min-w-[31%] flex-shrink-0"
+                        >
                           <Card className="bg-white border-gray-200 overflow-hidden hover:border-red-500 hover:shadow-md transition-all duration-300 h-full cursor-pointer">
                             <div className="relative h-48 w-full">
                               <Image
@@ -202,20 +225,20 @@ export default function TrendingReviews() {
             </div>
           </div>
 
-          {/* Navigation buttons */}
+          {/* Navigation buttons - more visible on mobile */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-100 transition-transform hover:scale-105"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-2 md:-translate-x-4 bg-white rounded-full p-2 md:p-3 shadow-md z-10 hover:bg-gray-100 transition-transform hover:scale-105"
             aria-label="Previous slide"
           >
-            <ChevronLeft className="h-6 w-6 text-gray-700" />
+            <ChevronLeft className="h-5 w-5 md:h-6 md:w-6 text-gray-700" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white rounded-full p-2 shadow-md z-10 hover:bg-gray-100 transition-transform hover:scale-105"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-2 md:translate-x-4 bg-white rounded-full p-2 md:p-3 shadow-md z-10 hover:bg-gray-100 transition-transform hover:scale-105"
             aria-label="Next slide"
           >
-            <ChevronRight className="h-6 w-6 text-gray-700" />
+            <ChevronRight className="h-5 w-5 md:h-6 md:w-6 text-gray-700" />
           </button>
 
           {/* Indicators */}
