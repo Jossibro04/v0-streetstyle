@@ -46,9 +46,7 @@ export default function Navbar() {
             <Link href="/map" className="text-gray-700 hover:text-red-500 transition">
               {t("nav.map")}
             </Link>
-            <Link href="/about" className="text-gray-700 hover:text-red-500 transition">
-              {t("nav.about")}
-            </Link>
+            {/* Removed About Link */}
 
             {/* Language Selector */}
             <LanguageSelector />
@@ -125,13 +123,7 @@ export default function Navbar() {
               >
                 {t("nav.map")}
               </Link>
-              <Link
-                href="/about"
-                className="text-gray-700 hover:text-red-500 transition px-3 py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {t("nav.about")}
-              </Link>
+              {/* Removed About Link */}
               <div className="flex space-x-2 px-3 py-2">
                 <Link
                   href="/login"

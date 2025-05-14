@@ -15,26 +15,32 @@ export default function RatingsVisualization({
   const maxCount = Math.max(...ratingDistribution)
 
   return (
-    <div className="bg-zinc-900 text-white p-4 rounded-lg">
-      <div className="flex justify-between items-center mb-2 border-b border-zinc-700 pb-2">
+    <div className="bg-white text-gray-900 p-4 rounded-lg shadow-md border border-gray-200">
+      <div className="flex justify-between items-center mb-2 border-b border-gray-200 pb-2">
         <h3 className="text-sm font-medium uppercase tracking-wider">RATINGS</h3>
         <span className="text-sm">{(totalRatings / 1000).toFixed(1)}K FANS</span>
       </div>
 
       <div className="flex items-center justify-between mb-4">
-        <Star className="h-5 w-5 text-green-500 fill-green-500" />
+        <Star className="h-5 w-5 text-red-600 fill-red-600" />
 
         <div className="flex items-end h-16 space-x-1 mx-2">
-          {ratingDistribution.map((count, index) => (
-            <div
-              key={index}
-              className="w-4 bg-blue-400/80 rounded-sm"
-              style={{
-                height: `${(count / maxCount) * 100}%`,
-                opacity: 0.7 + index / 10,
-              }}
-            />
-          ))}
+          {ratingDistribution.map((count, index) => {
+            // Calculate color intensity based on index (higher index = darker red)
+            const baseColor = 255 // Red base
+            const intensity = Math.max(baseColor - index * 30, 120) // Gradually darker red, min 120
+
+            return (
+              <div
+                key={index}
+                className="w-4 rounded-sm"
+                style={{
+                  height: `${(count / maxCount) * 100}%`,
+                  backgroundColor: `rgb(${intensity}, 0, 0)`,
+                }}
+              />
+            )
+          })}
         </div>
 
         <div className="flex flex-col items-end">
@@ -44,7 +50,7 @@ export default function RatingsVisualization({
               <Star
                 key={star}
                 className={`h-3 w-3 ${
-                  star <= Math.round(averageRating) ? "text-green-500 fill-green-500" : "text-zinc-600"
+                  star <= Math.round(averageRating) ? "text-red-600 fill-red-600" : "text-gray-300"
                 }`}
               />
             ))}

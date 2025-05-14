@@ -6,9 +6,10 @@ import MobileReviewCard from "@/components/mobile-app/mobile-review-card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Search, MapPin, Filter } from "lucide-react"
+import { Search, MapPin, Filter, Heart } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useFavorites } from "@/contexts/favorites-context"
 
 // Mock data for trending reviews
 const trendingReviews = [
@@ -90,7 +91,9 @@ const nearbyRestaurants = [
 
 export default function MobileAppPage() {
   const [activeTab, setActiveTab] = useState("feed")
+  const { favorites } = useFavorites()
 
+  // Add a new tab content for favorites
   return (
     <div className="min-h-screen bg-gray-100 pb-20 pt-14">
       <MobileNavbar />
@@ -123,10 +126,11 @@ export default function MobileAppPage() {
 
         {/* Content Tabs */}
         <Tabs defaultValue="feed" className="w-full" onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-3 mb-6">
+          <TabsList className="grid grid-cols-4 mb-6">
             <TabsTrigger value="feed">Feed</TabsTrigger>
             <TabsTrigger value="nearby">Nearby</TabsTrigger>
             <TabsTrigger value="popular">Popular</TabsTrigger>
+            <TabsTrigger value="favorites">Favorites</TabsTrigger>
           </TabsList>
 
           <TabsContent value="feed" className="space-y-4">
@@ -248,6 +252,53 @@ export default function MobileAppPage() {
                 Load More
               </Button>
             </div>
+          </TabsContent>
+          {/* New Favorites Tab */}
+          <TabsContent value="favorites">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-bold text-gray-900">My Favorites</h2>
+            </div>
+
+            {favorites.length > 0 ? (
+              <div className="space-y-4">
+                {favorites.map((restaurant) => (
+                  <Link href={`/restaurant/${restaurant.id}`} key={restaurant.id}>
+                    <div className="flex bg-white rounded-lg overflow-hidden border border-gray-200">
+                      <div className="relative w-24 h-24">
+                        <Image
+                          src={restaurant.image || "/placeholder.svg"}
+                          alt={restaurant.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 p-3">
+                        <div className="flex justify-between">
+                          <h3 className="font-medium text-gray-900">{restaurant.name}</h3>
+                          <div className="flex items-center text-sm">
+                            <span className="text-red-600 font-medium">{restaurant.rating}</span>
+                            <span className="ml-1">★</span>
+                          </div>
+                        </div>
+                        <p className="text-gray-600 text-sm">{restaurant.location}</p>
+                        <div className="flex justify-between items-center mt-2">
+                          <Heart className="h-4 w-4 fill-red-600 text-red-600" />
+                          <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">Favorite</span>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+                <Heart className="h-12 w-12 mx-auto text-gray-300 mb-4" />
+                <p className="text-gray-600">No favorites yet</p>
+                <Button variant="outline" className="mt-4">
+                  <Link href="/nearby">Explore Restaurants</Link>
+                </Button>
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </main>

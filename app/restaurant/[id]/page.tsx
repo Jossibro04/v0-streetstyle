@@ -10,6 +10,7 @@ import Image from "next/image"
 import Link from "next/link"
 import RatingsVisualization from "@/components/ratings-visualization"
 import { CustomButton } from "@/components/ui/custom-button"
+import { useFavorites } from "@/contexts/favorites-context"
 
 // Mock data for restaurant details
 const restaurantData = {
@@ -110,9 +111,27 @@ const reviewLocations = [
 ]
 
 export default function RestaurantPage() {
-  const [isFavorite, setIsFavorite] = useState(false)
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null)
   const [activePhotoIndex, setActivePhotoIndex] = useState(0)
+  const { isFavorite, addFavorite, removeFavorite } = useFavorites()
+
+  // Check if this restaurant is in favorites
+  const favorited = isFavorite(restaurantData.id)
+
+  // Handle favorite toggle
+  const handleFavoriteToggle = () => {
+    if (favorited) {
+      removeFavorite(restaurantData.id)
+    } else {
+      addFavorite({
+        id: restaurantData.id,
+        name: restaurantData.name,
+        location: restaurantData.address,
+        rating: restaurantData.rating,
+        image: restaurantData.photos[0] || "/placeholder.svg",
+      })
+    }
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -188,12 +207,12 @@ export default function RestaurantPage() {
           <div className="container mx-auto px-4">
             <div className="flex flex-wrap gap-4">
               <CustomButton
-                variant={isFavorite ? "default" : "outline"}
-                className={isFavorite ? "bg-red-600 hover:bg-red-700" : ""}
-                onClick={() => setIsFavorite(!isFavorite)}
+                variant={favorited ? "default" : "outline"}
+                className={favorited ? "bg-red-600 hover:bg-red-700" : ""}
+                onClick={handleFavoriteToggle}
               >
-                <Heart className={`mr-2 h-5 w-5 ${isFavorite ? "fill-white" : ""}`} />
-                {isFavorite ? "Saved" : "Save"}
+                <Heart className={`mr-2 h-5 w-5 ${favorited ? "fill-white" : ""}`} />
+                {favorited ? "Saved" : "Save"}
               </CustomButton>
               <CustomButton variant="outline">
                 <Share2 className="mr-2 h-5 w-5" />

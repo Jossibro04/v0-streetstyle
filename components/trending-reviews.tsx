@@ -7,6 +7,7 @@ import { Star, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
+import Link from "next/link"
 
 const trendingReviews = [
   {
@@ -167,34 +168,33 @@ export default function TrendingReviews() {
                     {trendingReviews
                       .slice(slideIndex * visibleReviews, (slideIndex + 1) * visibleReviews)
                       .map((review) => (
-                        <Card
-                          key={review.id}
-                          className="bg-white border-gray-200 overflow-hidden hover:border-red-500 hover:shadow-md transition-all duration-300"
-                        >
-                          <div className="relative h-48 w-full">
-                            <Image
-                              src={review.image || "/placeholder.svg"}
-                              alt={review.title}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                          <CardContent className="p-4">
-                            <div className="flex justify-between items-start mb-2">
-                              <h3 className="text-xl font-bold text-gray-900">{review.title}</h3>
-                              <div className="flex items-center bg-red-700 px-2 py-1 rounded text-sm text-white">
-                                <Star className="h-4 w-4 fill-white text-white mr-1" />
-                                <span>{review.rating}</span>
-                              </div>
+                        <Link href={`/restaurant/${review.id}`} key={review.id} className="block">
+                          <Card className="bg-white border-gray-200 overflow-hidden hover:border-red-500 hover:shadow-md transition-all duration-300 h-full cursor-pointer">
+                            <div className="relative h-48 w-full">
+                              <Image
+                                src={review.image || "/placeholder.svg"}
+                                alt={review.title}
+                                fill
+                                className="object-cover"
+                              />
                             </div>
-                            <p className="text-gray-600 text-sm mb-3">{review.location}</p>
-                            <p className="text-gray-700">{review.review}</p>
-                          </CardContent>
-                          <CardFooter className="px-4 py-3 border-t border-gray-200 text-sm text-gray-600">
-                            <span>{review.author}</span>
-                            <span className="ml-auto">{translateDate(review.date)}</span>
-                          </CardFooter>
-                        </Card>
+                            <CardContent className="p-4">
+                              <div className="flex justify-between items-start mb-2">
+                                <h3 className="text-xl font-bold text-gray-900">{review.title}</h3>
+                                <div className="flex items-center bg-red-700 px-2 py-1 rounded text-sm text-white">
+                                  <Star className="h-4 w-4 fill-white text-white mr-1" />
+                                  <span>{review.rating}</span>
+                                </div>
+                              </div>
+                              <p className="text-gray-600 text-sm mb-3">{review.location}</p>
+                              <p className="text-gray-700">{review.review}</p>
+                            </CardContent>
+                            <CardFooter className="px-4 py-3 border-t border-gray-200 text-sm text-gray-600">
+                              <span>{review.author}</span>
+                              <span className="ml-auto">{translateDate(review.date)}</span>
+                            </CardFooter>
+                          </Card>
+                        </Link>
                       ))}
                   </div>
                 </div>
@@ -234,9 +234,11 @@ export default function TrendingReviews() {
         </div>
 
         <div className="text-center mt-10">
-          <button className="text-red-600 border border-red-600 px-6 py-2 rounded-md hover:bg-red-600 hover:text-white transition-colors transition-transform hover:scale-105">
-            {t("trending.view_all")}
-          </button>
+          <Link href="/reviews">
+            <button className="text-red-600 border border-red-600 px-6 py-2 rounded-md hover:bg-red-600 hover:text-white transition-colors transition-transform hover:scale-105">
+              {t("trending.view_all")}
+            </button>
+          </Link>
         </div>
       </div>
     </section>
