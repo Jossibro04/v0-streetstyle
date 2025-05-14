@@ -26,11 +26,6 @@ export default function Footer() {
             <h3 className="text-2xl font-bold mb-6">{t("footer.quick_links")}</h3>
             <ul className="space-y-4">
               <li>
-                <Link href="/about" className="text-gray-400 hover:text-white transition">
-                  {t("footer.about_us")}
-                </Link>
-              </li>
-              <li>
                 <Link href="/popular-spots" className="text-gray-400 hover:text-white transition">
                   {t("footer.popular_spots")}
                 </Link>
@@ -38,6 +33,16 @@ export default function Footer() {
               <li>
                 <Link href="/write-review" className="text-gray-400 hover:text-white transition">
                   {t("footer.write_review")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/faq" className="text-gray-400 hover:text-white transition">
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <Link href="/help" className="text-gray-400 hover:text-white transition">
+                  Help
                 </Link>
               </li>
               <li>
@@ -52,6 +57,23 @@ export default function Footer() {
           <div>
             <h3 className="text-2xl font-bold mb-6">{t("footer.connect")}</h3>
             <p className="text-gray-400 mb-6">{t("footer.social_description")}</p>
+
+            {/* Contact Information */}
+            <div className="space-y-3 mb-6">
+              <div className="flex items-center text-gray-400">
+                <span className="font-medium mr-2">Phone:</span>
+                <a href="tel:+18681234567" className="hover:text-white transition">
+                  +1 (868) 123-4567
+                </a>
+              </div>
+              <div className="flex items-center text-gray-400">
+                <span className="font-medium mr-2">Email:</span>
+                <a href="mailto:info@streetstyle.com" className="hover:text-white transition">
+                  info@streetstyle.com
+                </a>
+              </div>
+            </div>
+
             <div className="flex space-x-6">
               <Link href="https://facebook.com" className="text-gray-400 hover:text-white transition">
                 <Facebook className="h-6 w-6" />
