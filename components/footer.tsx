@@ -18,36 +18,68 @@ export default function Footer() {
               <Store className="h-8 w-8 text-white" />
               <h2 className="text-5xl font-extrabold tracking-tight">Streetstyle</h2>
             </div>
-            <p className="text-gray-400 mb-6">{t("footer.description")}</p>
+            <p className="text-gray-400 mb-6">Discover the best local street food spots in Trinidad & Tobago</p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-2xl font-bold mb-6">{t("footer.quick_links")}</h3>
-            <ul className="space-y-4">
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
               <li>
-                <Link href="/popular-spots" className="text-gray-400 hover:text-white transition">
-                  {t("footer.popular_spots")}
+                <Link href="/spots" className="hover:text-red-400 transition-colors">
+                  Popular Spots
                 </Link>
               </li>
               <li>
-                <Link href="/write-review" className="text-gray-400 hover:text-white transition">
-                  {t("footer.write_review")}
+                <Link href="/map" className="hover:text-red-400 transition-colors">
+                  Food Map
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-gray-400 hover:text-white transition">
-                  FAQ
+                <Link href="/submit-spot" className="hover:text-red-400 transition-colors">
+                  Submit a Spot
                 </Link>
               </li>
               <li>
-                <Link href="/help" className="text-gray-400 hover:text-white transition">
-                  Help
+                <Link href="/about" className="hover:text-red-400 transition-colors">
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-400 hover:text-white transition">
-                  {t("footer.contact_us")}
+                <Link href="/contact" className="hover:text-red-400 transition-colors">
+                  Contact Us
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Resources */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Resources</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/help" className="hover:text-red-400 transition-colors">
+                  Help Center
+                </Link>
+              </li>
+              <li>
+                <Link href="/faq" className="hover:text-red-400 transition-colors">
+                  FAQs
+                </Link>
+              </li>
+              <li>
+                <Link href="/community-guidelines" className="hover:text-red-400 transition-colors">
+                  Community Guidelines
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy-policy" className="hover:text-red-400 transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms-of-service" className="hover:text-red-400 transition-colors">
+                  Terms of Service
                 </Link>
               </li>
             </ul>
@@ -55,8 +87,8 @@ export default function Footer() {
 
           {/* Connect With Us */}
           <div>
-            <h3 className="text-2xl font-bold mb-6">{t("footer.connect")}</h3>
-            <p className="text-gray-400 mb-6">{t("footer.social_description")}</p>
+            <h3 className="text-lg font-semibold mb-4">Connect With Us</h3>
+            <p className="text-gray-400 mb-6">Follow us on social media for updates and special features</p>
 
             {/* Contact Information */}
             <div className="space-y-3 mb-6">
@@ -92,9 +124,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500">
-          <p>
-            &copy; {currentYear} Streetstyle. {t("footer.rights")}
-          </p>
+          <p>&copy; {currentYear} Streetstyle. All rights reserved.</p>
         </div>
       </div>
     </footer>

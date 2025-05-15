@@ -40,8 +40,8 @@ export default function Navbar() {
             <Link href="/" className="text-gray-700 hover:text-red-500 transition">
               {t("nav.home")}
             </Link>
-            <Link href="/reviews" className="text-gray-700 hover:text-red-500 transition">
-              {t("nav.reviews")}
+            <Link href="/spots" className="text-gray-700 hover:text-red-500 transition">
+              {t("nav.spots")}
             </Link>
             <Link href="/map" className="text-gray-700 hover:text-red-500 transition">
               {t("nav.map")}
@@ -110,11 +110,11 @@ export default function Navbar() {
                 {t("nav.home")}
               </Link>
               <Link
-                href="/reviews"
+                href="/spots"
                 className="text-gray-700 hover:text-red-500 transition px-3 py-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                {t("nav.reviews")}
+                {t("nav.spots")}
               </Link>
               <Link
                 href="/map"

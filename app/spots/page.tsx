@@ -29,14 +29,16 @@ export default function ReviewsPage() {
         <section className="bg-red-700 text-white py-12">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("reviews.title")}</h1>
-              <p className="text-xl mb-8">{t("reviews.subtitle")}</p>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">Local Food Spots</h1>
+              <p className="text-xl mb-8">
+                Discover hidden gems and underrated local vendors across Trinidad and Tobago
+              </p>
 
               <form onSubmit={handleSearch} className="relative max-w-xl mx-auto">
                 <div className="relative h-16">
                   <Input
                     type="text"
-                    placeholder={t("reviews.search_placeholder")}
+                    placeholder="Search for food spots, locations, or cuisine types..."
                     className="h-full pl-12 pr-32 py-3 w-full text-gray-900 bg-white border-0 rounded-full shadow-lg focus:ring-2 focus:ring-red-500 text-base"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -46,7 +48,7 @@ export default function ReviewsPage() {
                     type="submit"
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full bg-red-600 hover:bg-red-700 transition-transform hover:scale-105 h-12 px-6"
                   >
-                    {t("reviews.search_button")}
+                    Find Spots
                   </Button>
                 </div>
               </form>

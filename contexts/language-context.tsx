@@ -35,6 +35,7 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.login": "Log In",
     "nav.signup": "Sign Up",
     "nav.search": "Search by cuisine",
+    "nav.spots": "Spots",
 
     // Hero
     "hero.title": "Taste the Soul of Trinidad & Tobago",
@@ -44,6 +45,8 @@ const translations: Record<Language, Record<string, string>> = {
     "hero.explore_reviews": "Explore Reviews",
     "hero.join": "Join 5,000+ food lovers sharing authentic experiences",
     "hero.featured": "Featured Review",
+    "hero.find_spot": "Find a Spot",
+    "hero.submit_spot": "Submit a Spot",
 
     // Trending Reviews
     "trending.title": "Trending Reviews",
@@ -59,8 +62,9 @@ const translations: Record<Language, Record<string, string>> = {
     "trending.months_ago": "months ago",
 
     // Map Section
-    "map.title": "Food Spots Map",
-    "map.subtitle": "Discover the best street food spots across Trinidad and Tobago",
+    "map.title": "Discover Hidden Food Spots",
+    "map.subtitle":
+      "Explore our interactive map to find underrated local vendors and hidden culinary gems across Trinidad and Tobago",
     "map.popular": "Popular Locations",
     "map.reviews": "reviews",
 
@@ -163,6 +167,11 @@ const translations: Record<Language, Record<string, string>> = {
     "reviews.cuisines.bbq": "BBQ",
     "reviews.cuisines.seafood": "Seafood",
     "reviews.cuisines.street_food": "Street Food",
+
+    "vendors.title": "Trending Vendors",
+    "vendors.subtitle": "Discover hidden and underrated local food spots",
+    "vendors.filter": "Filter:",
+    "vendors.explore_all": "Explore All Spots",
   },
   es: {
     // Navbar
@@ -405,7 +414,7 @@ const translations: Record<Language, Record<string, string>> = {
     "team.subtitle":
       "Les personnes passionnées derrière Streetstyle qui se consacrent à mettre en valeur le meilleur de la scène culinaire de Trinité-et-Tobago.",
     "team.roles.founder": "Fondatrice et PDG",
-    "team.roles.culinary_director": "Directeur Culinaire",
+    "team.roles.culinary_director": "Directeur Culinair",
     "team.roles.community_manager": "Responsable de la Communauté",
     "team.roles.tech_lead": "Responsable Technique",
     "team.bios.maria":
